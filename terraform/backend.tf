@@ -1,7 +1,8 @@
 terraform {
-  backend "s3" {
-    bucket = "techstarter-tom-iac"
-    key    = "ec2-example/vpc.tfstate"
-    region = "eu-central-1"
-  }
+  # Entferne oder kommentiere den Backend-Block aus
+  # backend "s3" {
+  #   bucket = "your-bucket-name"
+  #   key    = "path/to/your/terraform.tfstate"
+  #   region = "us-west-2"
+  # }
 }
