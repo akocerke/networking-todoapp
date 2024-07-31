@@ -1,8 +1,7 @@
 terraform {
-  # Entferne oder kommentiere den Backend-Block aus
-  # backend "s3" {
-  #   bucket = "your-bucket-name"
-  #   key    = "path/to/your/terraform.tfstate"
-  #   region = "us-west-2"
-  # }
+  backend "s3" {
+    bucket = "s3-dev-line"         # Ihr Bucket-Name
+    key    = "terraform.tfstate"
+    region = "eu-central-1"        # Die Region, in der sich das Bucket befindet
+  }
 }
