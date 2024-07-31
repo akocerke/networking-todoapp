@@ -7,7 +7,7 @@ jobs:
   terraform-deploy:
     runs-on: ubuntu-latest
     steps:
-      # Code Kopieren
+      # Checkout code
       - name: Checkout code
         uses: actions/checkout@v4
 
@@ -17,7 +17,7 @@ jobs:
         with:
           terraform_version: 1.9.3
 
-      # Bei AWS Authentifizieren
+      # Configure AWS Credentials
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -25,6 +25,11 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
+
+      # Initialize Terraform
+      - name: Terraform init
+        run: terraform init
+        working-directory: terraform
 
       # Format check
       - name: Terraform fmt check
@@ -34,11 +39,6 @@ jobs:
       # Validate Terraform configuration
       - name: Terraform validate
         run: terraform validate
-        working-directory: terraform
-
-      # Initialize Terraform
-      - name: Terraform init
-        run: terraform init
         working-directory: terraform
 
       # Terraform plan
