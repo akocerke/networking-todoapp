@@ -1,25 +1,57 @@
 name: Terraform deploy
 
-on: workflow_dispatch
+on:
+  workflow_dispatch:
 
 jobs:
   terraform-deploy:
     runs-on: ubuntu-latest
     steps:
       # Code Kopieren
-      - name: checkout
+      - name: Checkout code
         uses: actions/checkout@v4
 
+      # Setup Terraform
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: 1.9.3
 
       # Bei AWS Authentifizieren
-      - name: Configure AWS Credentials 2
+      - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-region: eu-central-1
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
+
+      # Format check
+      - name: Terraform fmt check
+        run: terraform fmt -check
+        working-directory: terraform
+
+      # Validate Terraform configuration
+      - name: Terraform validate
+        run: terraform validate
+        working-directory: terraform
+
+      # Initialize Terraform
+      - name: Terraform init
+        run: terraform init
+        working-directory: terraform
+
+      # Terraform plan
+      - name: Terraform plan
+        run: terraform plan
+        working-directory: terraform
+
+      # Apply Terraform configuration (only if you want to apply automatically)
+      - name: Terraform apply
+        run: terraform apply -auto-approve
+        working-directory: terraform
+
+      # Destroy Terraform resources (optional, uncomment if needed)
+      # - name: Terraform destroy
+      #   run: terraform destroy -auto-approve
+      #   working-directory: terraform
